@@ -88,63 +88,68 @@ namespace ToyRobotSim.Simulation
             { "WEST", 3 }
         };
 
-        // Going left is equivilent of minus 1 along the enum numerical value, looping back to 3 at 0.
-        public void LeftTurn(Robot robot)
+        // Rotate the robot left or right based on the command given.
+        void TurnRobot(Robot robot, string rotation)
         {
             // check if robot has been placed before and therefore has a valid direction
             if (robot.isPlaced)
             {
                 // Fetch current int value of robot current facing direction
                 var currentIntVal = DirectionOrdering.Where(dir => dir.Key == robot.currentFacingDirection).Select(d => d.Value).FirstOrDefault();
-                
-                // check to see if value needs to loop around to 3.
-                if (currentIntVal == 0)
+
+                if (rotation == "LEFT")
                 {
-                    currentIntVal = 3;
+                    // check to see if value needs to loop around to 3.
+                    if (currentIntVal == 0)
+                    {
+                        currentIntVal = 3;
+                    }
+                    else
+                    {
+                        currentIntVal = currentIntVal - 1;
+                    }
                 }
-                else 
+                else if (rotation == "RIGHT")
                 {
-                    currentIntVal = currentIntVal - 1; 
+                    // check to see if value needs to loop around to 0.
+                    if (currentIntVal == 3)
+                    {
+                        currentIntVal = 0;
+                    }
+                    else
+                    {
+                        currentIntVal = currentIntVal + 1;
+                    }
                 }
-                
+                else
+                {
+                    // No Valid Direction for turn?
+                }
                 var direction = DirectionOrdering.Where(dir => dir.Value == currentIntVal).Select(d => d.Key).FirstOrDefault();
                 if (direction != null)
                 {
                     robot.SetDirection(direction);
                 }
             }
+        }
+
+        public void LeftTurn(Robot robot)
+        {
+            TurnRobot(robot, "LEFT");
         }
 
         public void RightTurn(Robot robot)
         {
-            // check if robot has been placed before and therefore has a valid direction
-            if (robot.isPlaced)
-            {
-                // Fetch current int value of robot current facing direction
-                var currentIntVal = DirectionOrdering.Where(dir => dir.Key == robot.currentFacingDirection).Select(d => d.Value).FirstOrDefault();
-
-                // check to see if value needs to loop around to 0.
-                if (currentIntVal == 3)
-                {
-                    currentIntVal = 0;
-                }
-                else
-                {
-                    currentIntVal = currentIntVal + 1;
-                }
-
-                var direction = DirectionOrdering.Where(dir => dir.Value == currentIntVal).Select(d => d.Key).FirstOrDefault();
-                if (direction != null)
-                {
-                    robot.SetDirection(direction);
-                }
-            }
+            TurnRobot(robot, "RIGHT");
         }
 
         public void Report(Robot robot)
         {
-            Console.WriteLine("The current coordinates of the robot are: " + robot.currentCoodinates);
-            Console.WriteLine("The current facing direction of the robot is: " + robot.currentFacingDirection);
+            if (robot.isPlaced)
+            {
+                Console.WriteLine("The current coordinates of the robot are: " + robot.currentCoodinates);
+                Console.WriteLine("The current facing direction of the robot is: " + robot.currentFacingDirection);
+            }
         }
     }
 }

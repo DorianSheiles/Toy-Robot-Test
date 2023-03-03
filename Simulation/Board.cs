@@ -11,9 +11,9 @@ namespace ToyRobotSim.Simulation
         // Set board size for a square board inside a variable.
         // To facilitate a non square board, extension would be to have xSizeArray and ySizeArray
         public List<int> boardSizeArr = new List<int>()
-                    {
-                        0,1,2,3,4
-                    };
+        {
+            0,1,2,3,4
+        };
 
         // create the variable that contains the list of coordinates for the board
         public List<String> board = new List<String>();
